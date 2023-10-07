@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task 4</title>
+  <link rel="stylesheet" href="../style.css">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+<body>
+  <div class="bgr"></div>
+  <div class="container">
+    <img src="../img/vue.png" alt="vue" class="logo-vue">
+    <h1>Задача 3</h1>
+    <div class="task__item">
+      <div class="task__condition">
+        <p>“Рахунок у банку”
+          Вимоги: </p>
+        <ul>
+          <li>Спочатку сума дорівнює 0грн. Змінити суму у гривнях можна або зарахуванням на рахунок, або
+            зняттям.</li>
+          <li>Сума автоматично переводиться у долари та євро (фіксований курс задається у data).</li>
+          <li>можливість зарахувати суму (контролювати, щоб не була від’ємною)</li>
+          <li>можливість зняти (щоб не можна зняти більше ніж є на рахунку)</li>
+          <li>при виконанні зняття і зарахування коштів вираховувати 3% від суми (відображати кількість
+            відсотків автоматично)
+          </li>
+        </ul>
+        <br>
+        <p> При зміні суми :</p>
+        <ul>
+          <li>якщо було зняття, то суму відоражати червоним</li>
+          <li>якщо було зарахування, то суму відображати зеленим</li>
+          <li>Якщо сума валюти менша за 100 то відображати червоним кольором, інакше - зеленим</li>
+        </ul>
+      </div>
+      <a href="../index.html" class="task__link">Повернення на головну сторінку</a>
+    </div>
+    <h2>Результат рішення</h2>
+
+    <div id="app">
+
+
+
+      <div>Сума на рахунку: <span :style="colorCash">{{cashSum}} </span></div>
+      <br>
+      <div>
+        <label for="#">Поповнити рахунок:
+          <input
+            style="font-size: 18px; padding: 5px 10px; background: transparent; border: 2px solid #083617; color: #fff; border-radius: 10px; outline: none; margin-bottom: 10px;"
+            type="number" v-model="cashAdd">
+          <button
+            style="font-size: 18px; padding: 5px 10px; background: #176d49; border: 2px solid #083617; color: #e1de0c; border-radius: 10px; cursor: pointer; transition: 0.3s;"
+            class="hoveffect" @click="addCash">Поповнити</button>
+        </label>
+      </div>
+
+      <div>
+        <label for="#">Зняти з рахунку:
+          <input
+            style="font-size: 18px; padding: 5px 10px; background: transparent; border: 2px solid #083617; color: #fff; border-radius: 10px; outline: none; margin-bottom: 10px;"
+            type="number" v-model="cashWithdraw">
+          <button
+            style="font-size: 18px; padding: 5px 10px; background: #176d49; border: 2px solid #083617; color: #e1de0c; border-radius: 10px; cursor: pointer;transition: 0.3s;"
+            class="hoveffect" @click="withdraw">Зняти</button>
+        </label>
+      </div>
+
+      <div>Комісія за обслуговування 3%: {{commission}}</div>
+      <hr style="background-color: #083617; height: 2px; margin: 5px 0" />
+      <div style="margin-bottom: 10px;">Сума в доларах: {{dollar}}</div>
+      <div style="margin-bottom: 10px;">Сума в євро: {{euro}}</div>
+
+
+
+
+    </div>
+  </div>
+
+  <script>
+    const { createApp } = Vue
+
+    createApp({
+      data() {
+        return {
+          cashSum: 0,
+          dollarRange: 38,
+          euroRange: 42,
+          cashAdd: null,
+          cashWithdraw: null,
+          dollarSum: 0,
+          euroSum: 0,
+          colorCash: 'color: black;',
+          commission: 0,
+        }
+      },
+
+      methods: {
+        addCash() {
+          if (this.cashAdd > 0) this.cashSum = (parseFloat(this.cashSum) + this.cashAdd * 0.97).toFixed(2)
+          this.commission = (this.cashAdd * 0.03).toFixed(2)
+          this.cashAdd = 0
+          this.colorCash = 'color: green'
+        },
+        withdraw() {
+          let maxWithdraw = this.cashSum - this.cashWithdraw * 0.03
+          if (this.cashWithdraw <= maxWithdraw) this.cashSum = (this.cashSum - this.cashWithdraw * 1.03).toFixed(2)
+          this.commission = (this.cashWithdraw * 0.03).toFixed(2)
+          this.cashWithdraw = 0
+          this.colorCash = 'color: red'
+        }
+
+      },
+
+      computed: {
+        dollar() {
+          return (this.cashSum / this.dollarRange).toFixed(2)
+        },
+        euro() {
+
+          return (this.cashSum / this.euroRange).toFixed(2)
+        },
+
+      }
+
+    }).mount('#app')
+  </script>
+</body>
+
+</html>

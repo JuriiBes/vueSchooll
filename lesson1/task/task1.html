@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task 2</title>
+  <link rel="stylesheet" href="../style.css">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+<body>
+  <div class="bgr"></div>
+  <div class="container">
+    <img src="../img/vue.png" alt="vue" class="logo-vue">
+    <h1>Задача 1</h1>
+    <div class="task__item">
+      <div class="task__condition">
+        Вводиться кількість пасажирів. Вивести:
+        <ul>
+          <li>скільки потрібно автобусів (кожен автобус на 20 місць)</li>
+          <li>скільки пляшок води (кожному пасажиру 2 пляшки)</li>
+          <li>скільки бутербродів (кожному пасажиру 3 бутерброди)</li>
+        </ul>
+      </div>
+      <a href="../index.html" class="task__link">Повернення на головну сторінку</a>
+    </div>
+    <h2>Результат рішення</h2>
+
+
+
+    <div id="app">
+
+      <label for="#">Введіть кількість пасажирів: <input
+          style="font-size: 18px; padding: 5px 10px; background: transparent; border: 2px solid #083617; color: #fff; border-radius: 10px; outline: none;"
+          type="number" v-model="autobusNum"></label>
+
+      <div>Кількість потрібних автобусів: {{calculationBus}}</div>
+      <div>Необхідна кількість пляшок води: {{calculationWater}}</div>
+      <div>Необхідна кількість бутербродів: {{calculationSandwich}}</div>
+
+
+    </div>
+
+
+  </div>
+
+  <script>
+    const { createApp } = Vue
+
+    createApp({
+      data() {
+        return {
+          autobusNum: null,
+        }
+      },
+
+      computed: {
+        calculationBus() {
+          return Math.ceil(this.autobusNum / 20)
+        },
+        calculationWater() {
+          return this.autobusNum * 2
+        },
+        calculationSandwich() {
+          return this.autobusNum * 3
+        }
+      },
+
+    }).mount('#app')
+  </script>
+</body>
+
+</html>

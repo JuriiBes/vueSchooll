@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task 5</title>
+  <link rel="stylesheet" href="../style.css">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+<body>
+  <div class="bgr"></div>
+  <div class="container">
+    <img src="../img/vue.png" alt="vue" class="logo-vue">
+    <h1>Задача 4</h1>
+    <div class="task__item">
+      <div class="task__condition">
+        <p>Додаток містить масив об’єктів (логін, пароль) -- інсуючі логіни і паролі. Користувач вводить логін і
+          пароль, а програма повідомляє чи може користувач бути авторизованим (чи є він одним з масиву).</p>
+      </div>
+      <a href="../index.html" class="task__link">Повернення на головну сторінку</a>
+    </div>
+    <h2>Результат рішення</h2>
+
+
+
+    <div id="app">
+
+      <div style="display: flex; flex-direction: column; row-gap: 15px; max-width: 400px;">
+        <label for="#" style="display: flex; column-gap: 15px; justify-content: space-between;">User:
+          <input
+            style="font-size: 18px; padding: 5px 10px; background: transparent; border: 2px solid #083617; color: #fff; border-radius: 10px; outline: none; margin-bottom: 10px;"
+            type="text" v-model.lazy="userLogin"> </label>
+        <label for="#" style="display: flex; column-gap: 15px; justify-content: space-between;">Password:
+          <input
+            style="font-size: 18px; padding: 5px 10px; background: transparent; border: 2px solid #083617; color: #fff; border-radius: 10px; outline: none; margin-bottom: 10px;"
+            type="password" v-model.lazy="userPassword"> </label>
+        <button
+          style="font-size: 18px; padding: 5px 10px; background: #176d49; border: 2px solid #083617; color: #e1de0c; border-radius: 10px; cursor: pointer; transition: 0.3s;"
+          class="hoveffect" @click="userAuthorization">Enter</button>
+      </div>
+
+      <div>{{result}}</div>
+
+
+    </div>
+
+  </div>
+  <script>
+
+    const { createApp } = Vue
+
+    createApp({
+
+      data() {
+        return {
+          loginArr: [
+            {
+              login: 'Ivan',
+              password: '111222',
+            },
+            {
+              login: 'Vasil',
+              password: '222111',
+            },
+            {
+              login: 'Sonic',
+              password: 'cinoS',
+            },
+            {
+              login: 'Traktorist',
+              password: 'drdrdr',
+            }
+          ],
+          userLogin: null,
+          userPassword: null,
+          result: null,
+        }
+      },
+
+      methods: {
+        userAuthorization() {
+          console.log(this.userLogin);
+          console.log(this.userPassword);
+          this.loginArr.forEach(element => {
+            if (element.login === this.userLogin) this.result = 'Користувач з таким Login існує.'
+            if (element.login === this.userLogin && element.password === this.userPassword) this.result = 'Даний користувач може авторизуватись.'
+
+          });
+
+          if (this.result === null) this.result = 'Такого користувача не існує.'
+
+        }
+      },
+
+    }).mount('#app')
+  </script>
+</body>
+
+</html>

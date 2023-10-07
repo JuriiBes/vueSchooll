@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task 3</title>
+  <link rel="stylesheet" href="../style.css">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+<body>
+  <div class="bgr"></div>
+  <div class="container">
+    <img src="../img/vue.png" alt="vue" class="logo-vue">
+    <h1>Задача 2</h1>
+    <div class="task__item">
+      <div class="task__condition">
+        <p>Вводиться номер місяця. Автоматично виводити рекомендований одяг (зима – пальто, літо – шорти ….).
+          Також автоматично виводити зображення з відповідним зображенням лісу (зима – ліс зі снігом, осінь –
+          жовтий ліс, …).
+        </p>
+      </div>
+      <a href="../index.html" class="task__link">Повернення на головну сторінку</a>
+    </div>
+    <h2>Результат рішення</h2>
+
+    <div id="app">
+
+      <label for="#">Введіть номер місяця:<input
+          style="font-size: 18px; padding: 5px 10px; background: transparent; border: 2px solid #083617; color: #083617; border-radius: 10px; outline: none;"
+          type="number" v-model="month">
+
+        </input>
+      </label>
+      <div>Ми рекомендуємо: {{clothes()}}</div>
+      <div>
+        <img :src="addressImg" alt="img" style="max-width: 550px; height: 280px; margin-top: 30px;">
+      </div>
+
+
+    </div>
+  </div>
+
+
+  <script>
+    const { createApp } = Vue
+
+    createApp({
+      data() {
+        return {
+          month: null,
+          addressImg: 'https://adminassets.devops.arabiaweather.com/sites/default/files/field/image/4seasons.png',
+        }
+      },
+
+      methods: {
+        clothes() {
+          let result
+          if (this.month !== null) {
+            switch (this.month) {
+              case 1:
+              case 2:
+              case 12: {
+                this.addressImg = 'https://watchandlearn.scholastic.com/content/dam/classroom-magazines/watchandlearn/videos/earth-and-space/seasons/signs-of-winter/Signs-of-Winter.jpg'
+                result = 'Взимку потрібні - зимова куртка та тепле взуття.'
+              }
+                break;
+              case 3:
+              case 4:
+              case 5: {
+                this.addressImg = 'https://res.cloudinary.com/dk-find-out/image/upload/q_80,w_1920,f_auto/MA_00031467_hrit6x.jpg'
+                result = 'Весна - візьміть легку куртку та насолоджуйтесь пробудженням природи.'
+              }
+                break;
+              case 6:
+              case 7:
+              case 8: {
+                this.addressImg = 'https://www.metoffice.gov.uk/binaries/content/gallery/metofficegovuk/hero-images/weather/summer/summer-park.jpg'
+                result = 'Літо - шорти та футболка. Також захопіть з собою воду.'
+              }
+                break;
+              case 9:
+              case 10:
+              case 11: {
+                this.addressImg = 'https://i.pinimg.com/736x/4e/d8/e8/4ed8e8fdcbc474d45e750b396bbd917a.jpg'
+                result = 'Осінь - пальто та парасоля.'
+              }
+                break;
+              default: {
+                this.addressImg = 'https://adminassets.devops.arabiaweather.com/sites/default/files/field/image/4seasons.png'
+                result = 'Ми живемо з Вами в різних світах.'
+              }
+                break;
+            }
+          }
+          return result
+        }
+      },
+
+    }).mount('#app')
+  </script>
+</body>
+
+
+
+</html>
