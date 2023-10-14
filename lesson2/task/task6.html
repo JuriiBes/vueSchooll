@@ -142,7 +142,7 @@
         <form class="order__form">
           <label class="order__label"> <input type="text" class="order__input" placeholder="input here"
               v-model.lazy="addOrder"> </label>
-          <button type="button" class="order__button" @click="addDish">Add order</button>
+          <button type="button" class="order__button" @click="addDish(index)">Add order</button>
         </form>
 
         <div class="order__body">
@@ -151,7 +151,7 @@
             <div class="order__dish">
               <div class="order__item" v-for="(dish,index) in arrOrder" :key="idDish">
                 <div class="order__title-dish">{{dish.nameDish}}</div>
-                <button class="order__button-item" type="button" @click="addCooking">for cooking</button>
+                <button class="order__button-item" type="button" @click="addCooking(index)">for cooking</button>
               </div>
             </div>
           </div>
@@ -161,7 +161,7 @@
             <div class="order__dish">
               <div class="order__item" v-for="(dish,index) in arrPreparation" :key="idDish">
                 <div>{{dish.nameDish}}</div>
-                <button class="order__button-item" type="button" @click="addIssuance">for issue</button>
+                <button class="order__button-item" type="button" @click="addIssuance(index)">for issue</button>
               </div>
             </div>
           </div>
