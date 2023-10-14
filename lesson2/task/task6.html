@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task 6</title>
+  <link rel="stylesheet" href="../style.css">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    .order__table {
+      display: flex;
+      flex-direction: column;
+      row-gap: 25px;
+      padding: 10px;
+      border: 2px solid white;
+      background-color: rgba(126, 80, 25, 0.2);
+    }
+
+    .order__form {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      column-gap: 15px;
+      padding: 5px;
+    }
+
+    .order__input {
+      font-size: 22px;
+      padding: 15px 10px 5px;
+      background-color: transparent;
+      border-bottom: 2px solid white;
+      color: bisque;
+      outline: none;
+    }
+
+    .order__button {
+      padding: 5px 25px;
+      border-radius: 2px;
+      font-size: 14px;
+      font-weight: 600;
+      color: burlywood;
+      background-color: rgb(54, 46, 38);
+      text-transform: uppercase;
+      border: 1px solid whitesmoke;
+      transition: 0.3s;
+      transform: translate(0, 0);
+    }
+
+    .order__button span {
+      display: block;
+    }
+
+    .order__button:hover {
+
+      transform: translate(0, 1px);
+
+    }
+
+    .order__body {
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding: 10px;
+      border: 2px solid white;
+      justify-content: space-between;
+      min-height: 350px;
+    }
+
+    .order__orders,
+    .order__preparation,
+    .order__issuance {
+      border: 2px solid white;
+      flex: 0 0 30%;
+      padding: 5px 10px;
+    }
+
+    h4 {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .order__dish {
+      row-gap: 10px;
+      font-size: 20px;
+    }
+
+    .order__item {
+      display: flex;
+      flex-direction: row;
+      column-gap: 10px;
+      justify-content: space-between;
+      padding-bottom: 5px;
+    }
+
+    .order__item:not(:last-child) {
+      border-bottom: 1px solid white;
+      margin-bottom: 5px;
+    }
+
+    .order__title-dish {
+      flex: 1 1 auto;
+    }
+
+    .order__button-item {
+      padding: 5px 10px;
+      background-color: rgb(245, 128, 11);
+      border: 1px solid white;
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+
+    .order__button-item:hover {
+      background-color: rgb(245, 85, 11);
+      border: 1px solid rgb(94, 8, 8);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bgr"></div>
+  <div class="container">
+    <img src="../img/vue.png" alt="vue" class="logo-vue">
+    <h1>Задача 6</h1>
+    <div class="task__item">
+      <div class="task__condition">
+        <p>На кухню поступають замовлення. Спочатку ми додаємо їх у список “Очікують на виконання”, якщо повар береться
+          робити — замовлення переходить у список “Виконуються”, якщо замовлення виконано — переходить у список “Готові
+          до виносу”. Якщо натиснути на “Подано” - страва зникає з таблиці.</p>
+
+      </div>
+      <a href="../index.html" class="task__link">Повернення на головну сторінку</a>
+    </div>
+    <h2>Результат рішення</h2>
+
+    <div id="app">
+
+      <div class="order__table">
+
+        <form class="order__form">
+          <label class="order__label"> <input type="text" class="order__input" placeholder="input here"
+              v-model.lazy="addOrder"> </label>
+          <button type="button" class="order__button" @click="addDish">Add order</button>
+        </form>
+
+        <div class="order__body">
+          <div class="order__orders">
+            <h4>Order</h4>
+            <div class="order__dish">
+              <div class="order__item" v-for="(dish,index) in arrOrder" :key="idDish">
+                <div class="order__title-dish">{{dish.nameDish}}</div>
+                <button class="order__button-item" type="button" @click="addCooking">for cooking</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="order__preparation">
+            <h4>Preparation</h4>
+            <div class="order__dish">
+              <div class="order__item" v-for="(dish,index) in arrPreparation" :key="idDish">
+                <div>{{dish.nameDish}}</div>
+                <button class="order__button-item" type="button" @click="addIssuance">for issue</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="order__issuance">
+            <h4>Issuance</h4>
+            <div class="order__dish">
+              <div class="order__item" v-for="(dish,index) in arrIssuance" :key="idDish">
+                <div>{{dish.nameDish}}</div>
+                <button class="order__button-item" type="button" @click="removeIssued">issued</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+  <script>
+
+    const { createApp } = Vue
+
+    createApp({
+
+      data() {
+        return {
+          addOrder: null,
+          arrOrder: [
+            {
+              id: 111,
+              nameDish: 'Dorado + potato'
+            },
+          ],
+          arrPreparation: [
+            {
+              id: 112,
+              nameDish: 'Dorado + potato'
+            },
+            {
+              id: 121,
+              nameDish: 'Dorado '
+            },
+            {
+              id: 211,
+              nameDish: 'Potato'
+            },
+          ],
+          arrIssuance: [
+            {
+              id: 122,
+              nameDish: 'Snake eggs'
+            },
+          ],
+        }
+      },
+
+      methods: {
+        addDish() {
+          let dish = {
+            id: Symbol(),
+            nameDish: this.addOrder
+          }
+          this.arrOrder.push(dish)
+          this.addOrder = null
+        },
+        addCooking(index) {
+          let itemDish = this.arrOrder.splice(index, 1)
+          this.arrPreparation.push(itemDish[0])
+        },
+        addIssuance(index) {
+          let itemDish = this.arrPreparation.splice(index, 1)
+          this.arrIssuance.push(itemDish[0])
+        },
+        removeIssued(index) {
+          this.arrIssuance.splice(index, 1)
+
+        }
+
+      }
+    }).mount('#app')
+  </script>
+</body>
+
+</html>

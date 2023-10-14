@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task 3</title>
+  <link rel="stylesheet" href="../style.css">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    .app__task {
+      padding: 25px;
+      display: flex;
+      flex-direction: column;
+      row-gap: 15px;
+      max-width: 500px;
+      align-items: center;
+    }
+
+    .app__label {
+      display: flex;
+      flex-direction: column;
+      row-gap: 10px;
+      text-align: center;
+    }
+
+    .app__border {
+      border: 2px solid green;
+    }
+
+    .app__border-red {
+      border: 2px solid red;
+    }
+
+    .app__input {
+      font-size: 18px;
+      padding: 5px 10px;
+      background: transparent;
+      border: 2px solid #083617;
+      color: #fff;
+      border-radius: 10px;
+      outline: none;
+      margin-bottom: 10px;
+    }
+
+    .app__button {
+      font-size: 18px;
+      padding: 5px 25px;
+      background: #176d49;
+      border: 2px solid #083617;
+      color: #e1de0c;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .app__button:hover {
+      box-shadow: inset 0px 0px 50px 0px rgba(6, 39, 12, 0.87);
+      border-radius: 35px;
+    }
+
+    img {
+      max-width: 800px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bgr"></div>
+  <div class="container">
+    <img src="../img/vue.png" alt="vue" class="logo-vue">
+    <h1>Задача 3</h1>
+    <div class="task__item">
+      <div class="task__condition">
+        <p>Елемент тренажера англійської. Виводимо зображення елемента і слово. Користувач вводить
+          відповідь. Якщо вірно – відтворюємо фразу «Добре. Молодець!» (і додаємо зелену рамку до
+          елемента), якщо ні - то відтворюємо фразу «Невірно, спробуйте ще раз» (і додаємо червону рамку).
+        </p>
+        <img src="../img/table.png" alt="table">
+      </div>
+      <a href="../index.html" class="task__link">Повернення на головну сторінку</a>
+    </div>
+    <h2>Результат рішення</h2>
+
+    <div id="app">
+      <div :class="['app__task', borderTask]">
+        <div>
+          <img :src="imageLink" alt="img" style="width: 300px;">
+        </div>
+        <div>{{wordTask}}</div>
+        <label class="app__label">You answer: <input class="app__input" type="text" v-model.lazy="answerInput"></label>
+        <button class="app__button" type="button" @click="auditAnswer"> audit</button>
+
+        <div>{{answer}}</div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <script>
+    const { createApp } = Vue
+
+    let arrElement = [
+      {
+        linkImg: 'https://t.pimg.jp/054/055/374/5/54055374.jpg',
+        word: 'table',
+        answer: 'СТІЛ',
+      },
+      {
+        linkImg: 'https://png.pngtree.com/png-clipart/20210308/original/pngtree-red-pink-holiday-flower-mothers-day-carnation-png-image_5794953.jpg',
+        word: 'flower',
+        answer: 'КВІТКА',
+      },
+      {
+        linkImg: 'https://w7.pngwing.com/pngs/414/106/png-transparent-enzo-ferrari-sports-car-luxury-vehicle-ferrari-compact-car-car-performance-car.png',
+        word: 'car',
+        answer: 'АВТОМОБІЛЬ',
+      },
+      {
+        linkImg: 'https://e7.pngegg.com/pngimages/66/560/png-clipart-house-house.png',
+        word: 'house',
+        answer: 'ДІМ',
+      },
+    ]
+    let randIndex = Math.floor(Math.random() * arrElement.length)
+
+    createApp({
+      data() {
+        return {
+          imageLink: arrElement[randIndex].linkImg,
+          wordTask: arrElement[randIndex].word,
+          answerInput: null,
+          answer: null,
+        }
+      },
+
+      methods: {
+        auditAnswer() {
+          let resAnswerBorder
+          if (this.answerInput) {
+            if (this.answerInput.toUpperCase() === arrElement[randIndex].answer) this.answer = 'Answer true'
+            else this.answer = 'Answer false. Try again.'
+          }
+        }
+      },
+
+      computed: {
+        borderTask() {
+          if (this.answerInput && this.answer) {
+            let resAnswerBorder
+            if (this.answerInput.toUpperCase() === arrElement[randIndex].answer) resAnswerBorder = 'app__border'
+            else resAnswerBorder = 'app__border-red'
+            return resAnswerBorder
+          }
+        }
+      },
+    }).mount('#app')
+  </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task 2</title>
+  <link rel="stylesheet" href="../style.css">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    .app__form {
+      display: flex;
+      flex-direction: column;
+      row-gap: 15px;
+      max-width: 450px;
+    }
+
+    .app__label {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .app__input {
+      font-size: 18px;
+      padding: 5px 10px;
+      background: transparent;
+      border: 2px solid #083617;
+      color: #fff;
+      border-radius: 10px;
+      outline: none;
+      margin-bottom: 10px;
+    }
+
+    .app__button {
+      font-size: 18px;
+      padding: 5px 25px;
+      background: #176d49;
+      border: 2px solid #083617;
+      color: #e1de0c;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .app__button:hover {
+      box-shadow: inset 0px 0px 50px 0px rgba(6, 39, 12, 0.87);
+      border-radius: 35px;
+    }
+
+    img {
+      max-width: 800px;
+    }
+
+    select {
+      font-size: 20px;
+      font-weight: 400;
+      margin: 5px 0;
+      padding: 5px 15px;
+      border-radius: 10px;
+      background-color: rgba(225, 221, 12, 0.1);
+      border: 2px solid #e1de0c;
+    }
+
+    .class__pad {
+      padding: 15px 25px;
+      width: 800px;
+      height: 400px;
+    }
+
+    .bg__economy {
+      background-image: url('../img/task2/hmara.png');
+      background-size: 100% 100%;
+    }
+
+    .bg__business {
+      color: #e1de0c;
+      background-image: url('../img/task2/business.jpg');
+      background-size: 100% 100%;
+    }
+
+    .bg__business select {
+      background-color: rgba(225, 221, 12, 0.5);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bgr"></div>
+  <div class="container">
+    <img src="../img/vue.png" alt="vue" class="logo-vue">
+    <h1>Задача 2</h1>
+    <div class="task__item">
+      <div class="task__condition">
+        З випадаючого списку вибираємо клас квитка у літаку. Якщо:
+        <ul>
+          <li>бізнес - виводимо елементи для вибору газети та коньяку (якщо вибрано коньяк, то
+            запропонувати закуску (так/ні)),на фоні зображення бізнес кают.</li>
+          <li>економ – виводимо елементи для вибору типу пива і чипсів, на фоні хмарки.</li>
+        </ul>
+      </div>
+      <a href="../index.html" class="task__link">Повернення на головну сторінку</a>
+    </div>
+    <h2>Результат рішення</h2>
+
+    <div id="app">
+      <div :class="['class__pad',classPlaneBackground]">
+        <p>Choice class:</p>
+        <select id="planeClass" name="plane" v-model="planeClass">
+          <option value="classEconomy">Economy class</option>
+          <option value="classBusiness">Business class</option>
+        </select>
+        <div>
+          <select name="business" v-model="business" v-if="classDefinition">
+            <option value="newspaper">Newspaper</option>
+            <option value="whiskey">Whiskey</option>
+          </select>
+          <select name="economy" v-model="economy" v-else>
+            <option value="tea">Tea</option>
+            <option value="bear">Bear</option>
+          </select>
+        </div>
+        <div v-if="appetizer">
+          <p>Appetizer:</p>
+          <select name="Appetizer">
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    const { createApp } = Vue
+
+    createApp({
+      data() {
+        return {
+          planeClass: null,
+          business: null,
+          economy: null,
+        }
+      },
+
+      computed: {
+        classDefinition() {
+          let result
+          if (this.planeClass === 'classBusiness') result = true
+          else if (this.planeClass === 'classEconomy') result = false
+          return result
+        },
+        appetizer() {
+          return this.business === 'whiskey' && this.planeClass === 'classBusiness'
+        },
+        classPlaneBackground() {
+          let bgImage
+          if (this.planeClass === 'classBusiness') bgImage = 'bg__business'
+          else if (this.planeClass === 'classEconomy') bgImage = 'bg__economy'
+          return bgImage
+        }
+
+      },
+    }).mount('#app')
+  </script>
+
+
+</body>
+
+
+
+</html>

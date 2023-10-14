@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task 1</title>
+  <link rel="stylesheet" href="../style.css">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    .app__form {
+      display: flex;
+      flex-direction: column;
+      row-gap: 15px;
+      max-width: 450px;
+    }
+
+    .app__label {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .app__input {
+      font-size: 18px;
+      padding: 5px 10px;
+      background: transparent;
+      border: 2px solid #083617;
+      color: #fff;
+      border-radius: 10px;
+      outline: none;
+      margin-bottom: 10px;
+    }
+
+    .app__button {
+      font-size: 18px;
+      padding: 5px 25px;
+      background: #176d49;
+      border: 2px solid #083617;
+      color: #e1de0c;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .app__button:hover {
+      box-shadow: inset 0px 0px 50px 0px rgba(6, 39, 12, 0.87);
+      border-radius: 35px;
+    }
+
+    .app__img {
+      width: 250px;
+    }
+
+    .color__error-ivan {
+      color: blue;
+    }
+
+    .color__error {
+      color: red;
+    }
+  </style>
+</head>
+
+
+<body>
+  <div class="bgr"></div>
+  <div class="container">
+    <img src="../img/vue.png" alt="vue" class="logo-vue">
+    <h1>Задача 1</h1>
+    <div class="task__item">
+      <div class="task__condition">
+        Вводимо логіна і пароль. Якщо логін вірний відображаємо смайл. Якщо ні, то:
+        <ul>
+          <li>якщо логін = Іван – колір повідомлення про помилку синій.</li>
+          <li>якщо хтось інший, то колір повідомлення червоний.</li>
+        </ul>
+      </div>
+      <a href="../index.html" class="task__link">Повернення на головну сторінку</a>
+    </div>
+    <h2>Результат рішення</h2>
+
+    <div id="app">
+
+      <form class="app__form">
+        <label class="app__label">Login: <input type="text" class="app__input" v-model.lazy="userLogin"></label>
+        <label class="app__label"> Password: <input type="password" class="app__input"
+            v-model.lazy="userPassword"></label>
+        <button type="button" class="app__button"> Ok</button>
+      </form>
+
+      <div class="app__result">
+        <img src="../img/task1/smile.png" class="app__img" v-if="validation">
+        <div :class="validationIvan" v-else> Даний логін або пароль не вірні</div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const { createApp } = Vue
+    const userData = {
+      user: 'ADMIN',
+      password: '1111',
+    }
+    createApp({
+      data() {
+        return {
+          userLogin: null,
+          userPassword: null,
+        }
+      },
+
+      computed: {
+        validation() {
+          let user, password
+          if (this.userLogin) {
+            user = this.userLogin.toUpperCase()
+          }
+          return user === userData.user && this.userPassword === userData.password
+        },
+        validationIvan() {
+          let currentColor
+          let user
+          if (this.userLogin) user = this.userLogin.toUpperCase()
+          if (user === 'IVAN') currentColor = 'color__error-ivan'
+          else currentColor = 'color__error'
+          return currentColor
+        }
+      },
+
+    }).mount('#app')
+  </script>
+
+</body>
+
+</html>

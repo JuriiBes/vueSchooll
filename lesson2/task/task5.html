@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task 5</title>
+  <link rel="stylesheet" href="../style.css">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    .app__search {
+      margin-bottom: 25px;
+    }
+
+    .app__head {
+      display: flex;
+      align-items: center;
+      column-gap: 15px;
+    }
+
+    .app__head img {
+      height: 80px;
+
+    }
+
+    .app__title-link {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      row-gap: 7px;
+    }
+
+
+    .app__body {
+      display: flex;
+      flex-direction: column;
+      row-gap: 10px;
+    }
+
+    .app__body h3 {
+      color: blue;
+      font-size: 35px;
+      margin-bottom: 10px;
+    }
+
+    .app__body p {
+      font-size: 24px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bgr"></div>
+  <div class="container">
+    <img src="../img/vue.png" alt="vue" class="logo-vue">
+    <h1>Задача 5</h1>
+    <div class="task__item">
+      <div class="task__condition">
+        <p>Самостійно сформуйте масив даних та виведіть фрагмент на зразок поданого (дані не обов’язково
+          повинні співпадати).</p>
+        <img src="../img/list.png" alt="list">
+      </div>
+      <a href="../index.html" class="task__link">Повернення на головну сторінку</a>
+    </div>
+    <h2>Результат рішення</h2>
+
+
+
+    <div id="app">
+
+      <div class="app__search" v-for="item in arrSearch" :key="indexItem">
+        <div class="app__head">
+          <img :src="item.logoLink" alt="logo">
+          <div class="app__title-link">
+            <a :href="item.homePageLink">{{item.homePage}}</a>
+            <a :href="item.pageLink">{{item.pageLink}}</a>
+          </div>
+        </div>
+        <div class="app__body">
+          <h3>{{item.titlePage}}</h3>
+          <p>{{item.quoteContextPage}}</p>
+        </div>
+        <hr />
+      </div>
+
+
+    </div>
+
+  </div>
+  <script>
+
+    const { createApp } = Vue
+
+    createApp({
+
+      data() {
+        return {
+          arrSearch: [
+            {
+              logoLink: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/HTML5_logo_and_wordmark.svg/640px-HTML5_logo_and_wordmark.svg.png',
+              homePage: 'www.w3schools.com',
+              homePageLink: 'https://www.w3schools.com/',
+              titlePage: 'HTML Tutorial',
+              pageLink: 'https://www.w3schools.com/html/default.asp',
+              quoteContextPage: 'HTML is the standard markup language for Web pages. With HTML you can create your own Website. HTML is easy to learn - You will enjoy it!',
+            },
+            {
+              logoLink: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/CSS3_logo_and_wordmark.svg/1200px-CSS3_logo_and_wordmark.svg.png',
+              homePage: 'www.w3schools.com',
+              homePageLink: 'https://www.w3schools.com/',
+              titlePage: 'CSS Tutorial',
+              pageLink: 'https://www.w3schools.com/css/default.asp',
+              quoteContextPage: 'CSS is the language we use to style an HTML document. CSS describes how HTML elements should be displayed. This tutorial will teach you CSS from basic to advanced.',
+            },
+            {
+              logoLink: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/JavaScript-logo.png/640px-JavaScript-logo.png',
+              homePage: 'www.w3schools.com',
+              homePageLink: 'https://www.w3schools.com/',
+              titlePage: 'JavaScript Tutorial',
+              pageLink: 'https://www.w3schools.com/js/default.asp',
+              quoteContextPage: ' JavaScript is the world\'s most popular programming language. JavaScript is the programming language of the Web. JavaScript is easy to learn. This tutorial will teach you JavaScript from basic to advanced.',
+            },
+            {
+              logoLink: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/2367px-Vue.js_Logo_2.svg.png',
+              homePage: 'www.w3schools.com',
+              homePageLink: 'https://www.w3schools.com/',
+              titlePage: 'Vue Tutorial',
+              pageLink: 'https://www.w3schools.com/vue/index.php',
+              quoteContextPage: 'Vue is a popular JavaScript framework. User interfaces built in Vue updates automatically when data changes. Vue is easy to learn.',
+            }
+          ]
+        }
+      },
+
+      methods: {
+
+      },
+      computed: {
+
+      }
+    }).mount('#app')
+  </script>
+</body>
+
+</html>
