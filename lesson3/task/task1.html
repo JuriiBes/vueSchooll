@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task 1</title>
+  <link rel="stylesheet" href="../style.css">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    .game__place {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+      max-width: 600px;
+      padding: 25px;
+      border-radius: 15px;
+
+    }
+
+    .game__place-border {
+      border: 3px solid white;
+    }
+
+    .game__place-green {
+      border: 3px solid green;
+    }
+
+    .game__place-red {
+      border: 3px solid red;
+    }
+
+    .game__head-title {
+      padding: 5px;
+      color: rgb(3, 51, 7);
+      font-weight: 600;
+    }
+
+    .game__title {
+      padding: 5px 10px 15px;
+    }
+
+    .game__body {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 15px
+    }
+
+    .game__english-words,
+    .game__ukrainian-words {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      text-align: center;
+      flex: 1 1 auto;
+      padding: 15px 10px;
+      border-radius: 10px;
+      border: 2px solid white;
+    }
+
+    .game__list-eng,
+    .game__list-ukr {
+      padding: 5px 10px;
+      cursor: pointer;
+
+    }
+
+    .game__button {
+      padding: 10px;
+      font-size: 20px;
+      font-weight: 600;
+      color: white;
+      background-color: rgba(172, 255, 47, 0.37);
+      border-radius: 10px;
+      border: 2px solid white;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .game__button:hover {
+      background-color: rgba(172, 255, 47, 0.7);
+    }
+
+    .game__answer-true,
+    .game__answer-false {
+      text-align: center;
+    }
+
+    .selected {
+      border: 2px solid white;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bgr"></div>
+  <div class="container">
+    <img src="../img/vue.png" alt="vue" class="logo-vue">
+    <h1>Задача 1</h1>
+    <div class="task__item">
+      <div class="task__condition">
+        <p>Перекладач. Користувачу виводять змішані картки з словами на англійській і українській мові.
+          Користувач поступово клікає на картки (виділяємо синьою рамкою). Якщо знайдено правильні пари
+          карток, що відповідають одному слову, то видаляємо ці картки. Інакше - виділяємо червоною рамкою
+          і через секунду забираємо рамку</p>
+      </div>
+      <a href="../index.html" class="task__link">Повернення на головну сторінку</a>
+    </div>
+    <h2>Результат рішення</h2>
+
+    <div id="app">
+
+      <div :class="['game__place', colorBorderToTheAnswer]">
+        <h2 class="game__head-title">Вчимо англійську бавлячись в ігри.</h2>
+        <div class="game__body">
+
+          <div class="game__english-words">
+            <h2 class="game__title">English word</h2>
+            <div v-for="word in englishListWords" :key="word.id"
+              :class="['game__list-eng',{selected: word.id === selectedWords.engWord}]"
+              @click="gettingElementsForTheValidationObject(word.id, 'engWord')">
+              {{word.word}}
+            </div>
+          </div>
+
+          <div class="game__ukrainian-words">
+            <h2 class="game__title">Ukrainian word</h2>
+            <div v-for="word in ukrainianListWords" :key="word.id"
+              :class="['game__list-ukr',{selected: word.id === selectedWords.ukrWord}]"
+              @click="gettingElementsForTheValidationObject(word.id, 'ukrWord')">
+              {{word.word}}
+            </div>
+          </div>
+        </div>
+
+        <div class="game__answer" v-if="auditTwoAnswer">
+          <div class="game__answer-true" v-if="auditTrueAnswer"> Відповідь вірна</div>
+          <div class="game__answer-false" v-else>Відповідь не вірна</div>
+        </div>
+
+        <button class="game__button" @click="validationAnswerUser()" v-if="auditEndGame">Далі</button>
+        <button class="game__button" @click="startGame()" v-else>Граємо?</button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    const { createApp } = Vue
+    const wordLibrary = [
+      {
+        id: 111,
+        engWord: 'table',
+        ukrWord: 'стіл',
+      },
+      {
+        id: 222,
+        engWord: 'flower',
+        ukrWord: 'квітка',
+      },
+      {
+        id: 333,
+        engWord: 'book',
+        ukrWord: 'книга',
+      },
+      {
+        id: 444,
+        engWord: 'bubble',
+        ukrWord: 'бульбашка',
+      },
+      {
+        id: 555,
+        engWord: 'car',
+        ukrWord: 'автомобіль',
+      },
+      {
+        id: 666,
+        engWord: 'dog',
+        ukrWord: 'собака',
+      },
+      {
+        id: 777,
+        engWord: 'moon',
+        ukrWord: 'місяць',
+      },
+      {
+        id: 888,
+        engWord: 'a pig',
+        ukrWord: 'свиня',
+      },
+      {
+        id: 999,
+        engWord: 'window',
+        ukrWord: 'вікно',
+      },
+
+    ]
+
+    createApp({
+      data() {
+        return {
+          arrWordsForGame: [],
+          englishListWords: [],
+          ukrainianListWords: [],
+          selectedWords: {
+            engWord: null,
+            ukrWord: null,
+          },
+        }
+      },
+
+      computed: {
+        colorBorderToTheAnswer() {
+          let colorBorder
+          if (this.selectedWords.engWord && this.selectedWords.ukrWord) {
+            if (this.selectedWords.engWord === this.selectedWords.ukrWord) colorBorder = 'game__place-green'
+            else colorBorder = 'game__place-red'
+          }
+          else colorBorder = 'game__place-border '
+          return colorBorder
+        },
+
+        auditTwoAnswer() {
+          return this.selectedWords.engWord && this.selectedWords.ukrWord
+        },
+        auditTrueAnswer() {
+          return this.selectedWords.engWord === this.selectedWords.ukrWord
+        },
+        auditEndGame() {
+          return this.englishListWords.length !== 0
+        },
+
+
+      },
+      methods: {
+        // формування об'єкта слів для гри
+
+        formationArrayWordsForGame() {
+          let arrNumbUsedIndex = []
+          let arrSelectedWords = []
+          let randIndex
+          for (let i = 0; i < 5;) {
+            randIndex = this.randomIndex(wordLibrary)
+            if (arrNumbUsedIndex.includes(randIndex) !== true) {
+              arrNumbUsedIndex.push(randIndex)
+              arrSelectedWords.push(wordLibrary[randIndex])
+              i++
+            }
+          }
+          return arrSelectedWords
+        },
+        // Формування поля гри
+        formationListWords(language) {
+          let arrForFormation = JSON.parse(JSON.stringify(this.arrWordsForGame))
+          // let arrForFormation = JSON.parse(JSON.stringify(wordLibrary))
+          let listWords = []
+          for (let i; 0 !== arrForFormation.length;) {
+            let word = this.randomListWord(arrForFormation, language)
+            listWords.push(word)
+          }
+          return listWords
+        },
+        randomListWord(arr, language) {
+          let randIndex = this.randomIndex(arr)
+          let obj = {}
+          obj.id = arr[randIndex].id
+          if (language === 'engWord') obj.word = arr[randIndex].engWord
+          else obj.word = arr[randIndex].ukrWord
+          arr.splice(randIndex, 1)
+          return obj
+        },
+        randomIndex(arr) {
+          return Math.floor(Math.random() * arr.length)
+        },
+
+        // Виділення слів для перевірки та перевірка
+        gettingElementsForTheValidationObject(wordId, key) {
+          this.selectedWords[key] = wordId
+        },
+
+        validationAnswerUser() {
+          if (this.selectedWords.engWord && this.selectedWords.ukrWord) {
+            if (this.selectedWords.engWord === this.selectedWords.ukrWord) {
+              let indexEngWord = this.englishListWords.reduce((indexWord, element, index) => element.id === this.selectedWords.engWord ? indexWord = index : indexWord, 0)
+              this.englishListWords.splice(indexEngWord, 1)
+              let indexUkrWord = this.ukrainianListWords.reduce((indexWord, element, index) => element.id === this.selectedWords.ukrWord ? indexWord = index : indexWord, 0)
+              this.ukrainianListWords.splice(indexUkrWord, 1)
+              this.selectedWords.engWord = null
+              this.selectedWords.ukrWord = null
+            }
+            else {
+              this.selectedWords.engWord = null
+              this.selectedWords.ukrWord = null
+            }
+          }
+        },
+
+        startGame() {
+          this.arrWordsForGame = this.formationArrayWordsForGame(wordLibrary)
+          this.englishListWords = this.formationListWords('engWord')
+          this.ukrainianListWords = this.formationListWords('ukrWord')
+          if (this.selectedWords.engWord || this.selectedWords.ukrWord) {
+            this.selectedWords.engWord = null
+            this.selectedWords.ukrWord = null
+          }
+        },
+
+      },
+
+    }).mount('#app')
+  </script>
+
+</body>
+
+</html>

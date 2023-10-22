@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task 2</title>
+  <link rel="stylesheet" href="../style.css">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    .shop {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 35px;
+    }
+
+    .shop__office,
+    .shop__trading-hall {
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      gap: 15px;
+      flex: 1 1 45%;
+
+    }
+
+    .shop__formatting {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 15px;
+      flex: 1 1 90%;
+
+    }
+
+    .shop__department-list,
+    .shop__products-list {
+      flex: 1 1 45%;
+      border: 2px solid white;
+      border-radius: 5px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      row-gap: 7px;
+    }
+
+    .shop__department-item,
+    .shop__products-item {
+      background-color: rgba(255, 228, 196, 0.425);
+      padding: 3px 5px;
+      border: 1px solid transparent;
+    }
+
+    .shop__button-formation {
+      font-size: 22px;
+      font-weight: 600;
+      color: rgb(11, 165, 49);
+      padding: 7px 10px;
+      border-radius: 10px;
+      background-color: aqua;
+    }
+
+    .trading-hall__list {
+      display: flex;
+      flex-direction: column;
+      row-gap: 5px;
+      margin-bottom: 10px;
+      text-align: start;
+    }
+
+    .trading-hall__list li {
+      margin-left: 35px;
+    }
+
+    .trading-hall__title {
+      color: blueviolet;
+    }
+
+
+    .selected {
+      border: 1px solid white;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bgr"></div>
+  <div class="container">
+    <img src="../img/vue.png" alt="vue" class="logo-vue">
+    <h1>Задача 2</h1>
+    <div class="task__item">
+      <div class="task__condition">
+        <p>Мережа магазинів. Дано список відділень та список товарів. Для кожного відділення можна вибирати
+          декілька товарів. Вибирати та відображати перелік вибраних товарів для кожного відділення.</p>
+      </div>
+      <a href="../index.html" class="task__link">Повернення на головну сторінку</a>
+    </div>
+    <h2>Результат рішення</h2>
+
+    <div id="app">
+      <div class="shop">
+
+        <div class="shop__office">
+
+          <h3>Формування магазину</h3>
+
+          <div class="shop__formatting">
+
+            <div class="shop__department-list">
+              <div
+                :class="['shop__department-item', {selected: this.objFormation.nameDepartment!==null && this.objFormation.nameDepartment === department}]"
+                v-for="department, index in shopDepartmentList" :key="index" @click="addDepartmentToShop(department)">
+                {{department}}
+              </div>
+            </div>
+
+            <div class="shop__products-list">
+              <div
+                :class="['shop__products-item', {selected: this.objFormation.productsDepartment.indexOf(product) !== -1}]"
+                v-for="product, index in shopProductsList" :key="index" @click="addProductsToDepartmentsShop(product)">
+                {{product}}
+              </div>
+            </div>
+
+          </div>
+
+          <button class="shop__button-formation" type="button" @click="formationShop()">Сформувати</button>
+
+        </div>
+
+        <div class="shop__trading-hall trading-hall">
+          <h3>Магазин</h3>
+
+          <ul class="trading-hall__list" v-for="department, index in shop" :key="index">
+
+            <h4 class="trading-hall__title">{{department.nameDepartment}}</h4>
+
+            <li v-for="products,index in department.productsDepartment" :key="index">
+              {{products}}
+            </li>
+          </ul>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    const { createApp } = Vue
+
+    createApp({
+      data() {
+        return {
+          shopDepartmentList: [
+            'відділ "Овочі"',
+            'відділ "Випічка"',
+            'відділ "Алкоголь"',
+            'відділ "Посуд"',
+            'відділ "Крупи"',
+          ],
+          shopProductsList: [
+            'картопля',
+            'капуста',
+            'огірки',
+            'віскi',
+            'пиво',
+            'тарілки',
+            'виделки',
+            'сковорідка',
+            'гречка',
+            'рис',
+            'штрудель',
+            'медова бабка',
+          ],
+          shop: [],
+          objFormation: {
+            nameDepartment: null,
+            productsDepartment: []
+          }
+        }
+
+      },
+
+      methods: {
+        // Вибір відділу
+        addDepartmentToShop(nameDepartment) {
+          if (this.objFormation.nameDepartment === null || this.objFormation.nameDepartment !== nameDepartment) this.objFormation.nameDepartment = nameDepartment
+        },
+        // Вибір товарів для відділу
+        addProductsToDepartmentsShop(nameProduct) {
+          let includesProduct = this.objFormation.productsDepartment.indexOf(nameProduct)
+          if (includesProduct === -1) this.objFormation.productsDepartment.push(nameProduct)
+          else this.objFormation.productsDepartment.splice(includesProduct, 1)
+        },
+
+        removeElements() {
+          //Видалення департаменту зі списка після його формування
+          let indexDepartment = this.shopDepartmentList.indexOf(this.objFormation.nameDepartment)
+          this.shopDepartmentList.splice(indexDepartment, 1)
+
+          //Видалення продуктів зі списка після формування відділу
+          for (const element of this.objFormation.productsDepartment) {
+            let indexProduct = this.shopProductsList.indexOf(element)
+            console.log('indexProduct');
+            console.log(indexProduct);
+            this.shopProductsList.splice(indexProduct, 1)
+
+          }
+        },
+        // Очищення допоміжного об'єкта після формування відділу
+        clearObjFormation() {
+          this.objFormation.nameDepartment = null
+          this.objFormation.productsDepartment = []
+          console.log(this.objFormation);
+          console.log(this.objFormation);
+        },
+        // Формування відділу магазину
+        formationShop() {
+          let obj = JSON.parse(JSON.stringify(this.objFormation))
+          this.shop.push(obj)
+          this.removeElements()
+          this.clearObjFormation()
+        },
+
+      }
+    }).mount('#app')
+  </script>
+
+
+</body>
+
+
+
+</html>
